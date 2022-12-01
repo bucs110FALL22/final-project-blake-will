@@ -1,4 +1,5 @@
 import pygame
+
 pygame.init()
 
 
@@ -11,48 +12,93 @@ class Controller:
         # width = sizeList[0]
         # length = sizeList[1]
 
-        self.mainloop()
 
     def mainloop(self):
         loop = "menu"
-        while True:
+        run = True
+        while run:
             if loop == "menu":
-                self.menuloop()
+                #self.menuloop()
                 if self.menuloop() == "game":
                     loop = "game"
             elif loop == "game":
-                self.gameloop
-                if self.gameloop() == "kill":
-                    break
+                # if self.gameloop() == "kill":
+                #   loop = "done"
+                result = self.gameloop()
+                if result == "menu":
+                  loop = "menu"
+                
             elif loop == "end":
-                self.endloop
+                self.endloop()
+            elif loop == "done":
+              return ("Done")
 
     def menuloop(self):
 
         # sizeList = pygame.display.get_window_size()
         # width = sizeList[0]
         # length = sizeList[1]
-        font = pygame.font.Font(None, 70)
+        fontStart = pygame.font.Font(None, 70)
+        fontTitle = pygame.font.Font(None, 100)
+        fontQuit = pygame.font.Font(None, 30)
         rectStartButton = ((200, 250), (200, 75))
         startHitbox = pygame.Rect(rectStartButton)
+        rectQuitButton = ((45, 350), (60, 30))
+        quitButtonHitbox = pygame.Rect(rectQuitButton)
         self.screen.fill("white")
         pygame.draw.rect(self.screen, "palevioletred", rectStartButton)
-        msgStart = font.render("START", True, "black")
+        pygame.draw.rect(self.screen, "red", rectQuitButton)
+        msgStart = fontStart.render("START", True, "black")
+        msgTitle = fontTitle.render("Fishing  Game", True, "blue")
+        msgQuit = fontQuit.render("QUIT", True, "white")
         self.screen.blit(msgStart, (220, 265))
+        self.screen.blit(msgTitle, (65, 35))
+        self.screen.blit(msgQuit, (50, 355))
         pygame.display.flip()
-        while True:
+        run = True
+        while run:
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     clickPos = event.pos
                     if startHitbox.collidepoint(clickPos):
-                        return "game"
+                        self.screen.fill("white")
+                        pygame.display.flip()
+                        pygame.draw.rect(self.screen, "green", rectStartButton)
+                        self.screen.blit(msgStart, (220, 265))
+                        pygame.display.flip()
+                        pygame.time.wait(750)
+                        return ("game")
+                        run = False
+                    elif quitButtonHitbox.collidepoint(clickPos):
+                        pygame.quit()
+        
+          
+                        
 
     def gameloop(self):
         self.screen.fill("black")
         pygame.display.flip()
         print("Good luck!")
-        pygame.time.wait(1000)
-        return ("kill")
+        pygame.time.wait(500)
+        self.screen.fill("white")
+        rectBackToMenu = ((25, 25), (150, 50))
+        backToMenuHitbox = pygame.Rect(rectBackToMenu)
+        pygame.draw.rect(self.screen, "black", rectBackToMenu)
+        fontBackToMenu = pygame.font.Font(None, 50)
+        msgBackToMenu = fontBackToMenu.render("MENU", True, "white")
+        self.screen.blit(msgBackToMenu, (50, 35))
+        pygame.display.flip()
+        # also add level select screens once I can be bothered to get to that
+        run = True
+        while run:
+          for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+              clickPos = event.pos
+              if backToMenuHitbox.collidepoint(clickPos):
+                run = False
+        return ("menu")
+        
+        
 
     def endloop(
     ):  #potential "game over" state to display stats at the end of the game
