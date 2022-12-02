@@ -1,7 +1,7 @@
 import pygame
-import background
-import fish
-import player
+from src.background import Background
+from src.fish import Fish
+from src.player import Player
 from sys import exit
 
 pygame.init()
@@ -10,7 +10,7 @@ pygame.init()
 class Controller:
 
     def __init__(self):
-        self.screen = pygame.display.set_mode((600, 400))
+        self.screen = pygame.display.set_mode((800, 600))
 
         # sizeList = pygame.display.get_window_size()
         # width = sizeList[0]
@@ -44,9 +44,9 @@ class Controller:
         fontStart = pygame.font.Font(None, 70)
         fontTitle = pygame.font.Font(None, 100)
         fontQuit = pygame.font.Font(None, 30)
-        rectStartButton = ((200, 250), (200, 75))
+        rectStartButton = (((200*1.3), (250*1.5)), ((200*1.3), (75*1.5)))
         startHitbox = pygame.Rect(rectStartButton)
-        rectQuitButton = ((45, 350), (60, 30))
+        rectQuitButton = (((45*1.3), (350*1.5)), ((60*1.3), (30*1.5)))
         quitButtonHitbox = pygame.Rect(rectQuitButton)
         self.screen.fill("white")
         pygame.draw.rect(self.screen, "palevioletred", rectStartButton)
@@ -54,9 +54,9 @@ class Controller:
         msgStart = fontStart.render("START", True, "black")
         msgTitle = fontTitle.render("Fishing  Game", True, "blue")
         msgQuit = fontQuit.render("QUIT", True, "white")
-        self.screen.blit(msgStart, (220, 265))
-        self.screen.blit(msgTitle, (65, 35))
-        self.screen.blit(msgQuit, (50, 355))
+        self.screen.blit(msgStart, ((220*1.3), (265*1.5)))
+        self.screen.blit(msgTitle, ((65*1.3), (35*1.5)))
+        self.screen.blit(msgQuit, ((50*1.3), (355*1.5)))
         pygame.display.flip()
         run = True
         while run:
@@ -67,15 +67,15 @@ class Controller:
                         self.screen.fill("white")
                         pygame.display.flip()
                         pygame.draw.rect(self.screen, "green", rectStartButton)
-                        self.screen.blit(msgStart, (220, 265))
+                        self.screen.blit(msgStart, ((220*1.3), (265*1.5)))
                         pygame.display.flip()
                         pygame.time.wait(350)
                         pygame.display.flip()
                         pygame.time.wait(500)
                         self.screen.fill("white")
-                        rectBackToMenu = ((25, 25), (150, 50))
+                        rectBackToMenu = (((25*1.3), (25*1.5)), ((150*1.3), (50*1.5)))
                         backToMenuHitbox = pygame.Rect(rectBackToMenu)
-                        rectLevelButton = ((175, 125), (250, 150))
+                        rectLevelButton = (((175*1.3), (125*1.5)), ((250*1.3), (150*1.5)))
                         levelButtonHitbox = pygame.Rect(rectLevelButton)
                         pygame.draw.rect(self.screen, "black", rectBackToMenu)
                         pygame.draw.rect(self.screen, "blue", rectLevelButton)
@@ -103,19 +103,65 @@ class Controller:
                         exit()
 
     def gameloop(self):
-        level = background.Background()
-        level.image.blit(self.screen, (0, 0))
+        level = Background()
+        self.screen.blit(level.image, (0, 0))
+        boy = Player(500, 300, self.screen)
         pygame.display.flip()
         run = True
         while run:
-            for event in pygame.event.get():
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        pygame.quit()
-                        exit()
+          for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+              pygame.quit()
+              exit()
+            if event.type == pygame.KEYDOWN:
+              if event.key == pygame.K_ESCAPE:
+                pygame.quit()
+                exit()
+              if event.key == pygame.K_LEFT:
+                boy.left_pressed = True
+              if event.key == pygame.K_RIGHT:
+                boy.right_pressed = True
+              if event.key == pygame.K_UP:
+                boy.up_pressed = True
+              if event.key == pygame.K_DOWN:
+                boy.down_pressed = True
+              if event.key == pygame.K_SPACE:
+                boy.castHook()
+              if event.key == pygame.K_SPACE and boy.hook == True:
+                boy.catch
+            if event.type == pygame.KEYUP:
+              if event.key == pygame.K_LEFT:
+                boy.left_pressed = False
+              if event.key == pygame.K_RIGHT:
+                boy.right_pressed = False
+              if event.key == pygame.K_UP:
+                boy.up_pressed = False
+              if event.key == pygame.K_DOWN:
+                boy.down_pressed = False
+        
+          self.screen.fill((12,24,36))
+          self.screen.blit(level.image, (0,0))
+          boy.draw(self.screen)
+        
+          boy.update()
+          pygame.display.flip()
+        
+          self.clock.tick(20)
+            # for event in pygame.event.get():
+            #     if event.type == pygame.KEYDOWN:
+            #         if event.key == pygame.K_ESCAPE:
+            #           pygame.quit()
+            #           exit()
+            #         elif event.key == pygame.K_w or pygame.K_UP:
+            #           pass
+            #         elif event.key == pygame.K_a or pygame.K_LEFT:
+            #           pass
+            #         elif event.key == pygame.K_d or pygame.K_RIGHT:
+            #           pass
+            #         elif event.key == pygame.K_s or pygame.K_DOWN:
+            #           pass
 
-    def endloop(
-    ):  #potential "game over" state to display stats at the end of the game
+    def endloop():  #potential "game over" state to display stats at the end of the game
         pass
 
 

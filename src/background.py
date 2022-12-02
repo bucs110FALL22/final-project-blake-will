@@ -9,9 +9,7 @@ class Background:
     def __init__(self):
         self.image = pygame.image.load("assets/beech.jpg")
         self.yRange = 200
-        
-        self.screen = pygame.display.set_mode((600,400))
-        self.showImage(self.screen)
+      
 
     def spawn():
         side = random.randrange(0, 2, 1)
@@ -26,12 +24,3 @@ class Background:
         return self.yRange
 
 
-    def showImage(self, screen):
-      screen.fill("white")
-      pygame.display.flip()
-      pygame.time.wait(1000)
-      self.image.blit(screen, (0,0))
-      pygame.display.flip()
-      pygame.time.wait(2000)
-
-fishing = Background()

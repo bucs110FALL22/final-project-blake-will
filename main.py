@@ -1,11 +1,11 @@
 import pygame
-from controller import Controller
+from src.controller import Controller
 # import pygame_menu
 #import your controller
 
 def main():
     pygame.init()
-    fishing = controller.Controller()
+    fishing = Controller()
     fishing.mainloop()
     
     ###### NOTHING ELSE SHOULD GO IN main(), JUST THE ABOVE 3 LINES OF CODE ######
