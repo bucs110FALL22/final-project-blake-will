@@ -1,5 +1,5 @@
 import pygame
-
+from sys import exit
 pygame.init()
 
 
@@ -66,19 +66,18 @@ class Controller:
                         pygame.draw.rect(self.screen, "green", rectStartButton)
                         self.screen.blit(msgStart, (220, 265))
                         pygame.display.flip()
-                        pygame.time.wait(750)
+                        pygame.time.wait(350)
                         return ("game")
                         run = False
                     elif quitButtonHitbox.collidepoint(clickPos):
                         pygame.quit()
+                        exit()
         
           
                         
 
     def gameloop(self):
-        self.screen.fill("black")
         pygame.display.flip()
-        print("Good luck!")
         pygame.time.wait(500)
         self.screen.fill("white")
         rectBackToMenu = ((25, 25), (150, 50))
