@@ -1,5 +1,9 @@
 import pygame
+import background
+import fish
+import player
 from sys import exit
+
 pygame.init()
 
 
@@ -12,8 +16,10 @@ class Controller:
         # width = sizeList[0]
         # length = sizeList[1]
 
+        self.clock = pygame.time.Clock()
 
     def mainloop(self):
+        self.clock.tick(60)
         loop = "menu"
         run = True
         while run:
@@ -26,12 +32,9 @@ class Controller:
                 #   loop = "done"
                 result = self.gameloop()
                 if result == "menu":
-                  loop = "menu"
-                
+                    loop = "menu"
             elif loop == "end":
                 self.endloop()
-            elif loop == "done":
-              return ("Done")
 
     def menuloop(self):
 
@@ -67,37 +70,49 @@ class Controller:
                         self.screen.blit(msgStart, (220, 265))
                         pygame.display.flip()
                         pygame.time.wait(350)
-                        return ("game")
-                        run = False
+                        pygame.display.flip()
+                        pygame.time.wait(500)
+                        self.screen.fill("white")
+                        rectBackToMenu = ((25, 25), (150, 50))
+                        backToMenuHitbox = pygame.Rect(rectBackToMenu)
+                        rectLevelButton = ((175, 125), (250, 150))
+                        levelButtonHitbox = pygame.Rect(rectLevelButton)
+                        pygame.draw.rect(self.screen, "black", rectBackToMenu)
+                        pygame.draw.rect(self.screen, "blue", rectLevelButton)
+                        fontBackToMenu = pygame.font.Font(None, 50)
+                        msgBackToMenu = fontBackToMenu.render(
+                            "MENU", True, "white")
+                        self.screen.blit(msgBackToMenu, (50, 35))
+                        pygame.display.flip()
+                        # also add level select screens once I can be bothered to get to that
+                        run2 = True
+                        while run2:
+                            for event in pygame.event.get():
+                                if event.type == pygame.MOUSEBUTTONDOWN:
+                                    clickPos = event.pos
+                                    if backToMenuHitbox.collidepoint(clickPos):
+                                        return ("menu")
+                                    elif levelButtonHitbox.collidepoint(clickPos):
+                                        self.screen.fill("white")
+                                        pygame.display.flip()
+                                        pygame.time.wait(1000)
+                                        return ("game")
+
                     elif quitButtonHitbox.collidepoint(clickPos):
                         pygame.quit()
                         exit()
-        
-          
-                        
 
     def gameloop(self):
+        level = background.Background()
+        level.image.blit(self.screen, (0, 0))
         pygame.display.flip()
-        pygame.time.wait(500)
-        self.screen.fill("white")
-        rectBackToMenu = ((25, 25), (150, 50))
-        backToMenuHitbox = pygame.Rect(rectBackToMenu)
-        pygame.draw.rect(self.screen, "black", rectBackToMenu)
-        fontBackToMenu = pygame.font.Font(None, 50)
-        msgBackToMenu = fontBackToMenu.render("MENU", True, "white")
-        self.screen.blit(msgBackToMenu, (50, 35))
-        pygame.display.flip()
-        # also add level select screens once I can be bothered to get to that
         run = True
         while run:
-          for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN:
-              clickPos = event.pos
-              if backToMenuHitbox.collidepoint(clickPos):
-                run = False
-        return ("menu")
-        
-        
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        pygame.quit()
+                        exit()
 
     def endloop(
     ):  #potential "game over" state to display stats at the end of the game
