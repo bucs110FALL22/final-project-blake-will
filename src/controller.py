@@ -109,6 +109,9 @@ class Controller:
         pygame.display.flip()
         run = True
         while run:
+
+          # Character Movement
+          
           for event in pygame.event.get():
             if event.type == pygame.QUIT:
               pygame.quit()
@@ -118,26 +121,45 @@ class Controller:
                 pygame.quit()
                 exit()
               if event.key == pygame.K_LEFT:
-                boy.left_pressed = True
+                boy.leftPressed = True
+                boy.image = pygame.image.load("assets/boysideleft.png")
               if event.key == pygame.K_RIGHT:
-                boy.right_pressed = True
+                boy.rightPressed = True
+                boy.image = pygame.image.load("assets/boyside.png")
               if event.key == pygame.K_UP:
-                boy.up_pressed = True
+                boy.upPressed = True
+                boy.image = pygame.image.load("assets/boyback.png")
               if event.key == pygame.K_DOWN:
-                boy.down_pressed = True
+                boy.downPressed = True
+                boy.image = pygame.image.load("assets/boy.png")
               if event.key == pygame.K_SPACE:
                 boy.castHook()
               if event.key == pygame.K_SPACE and boy.hook == True:
                 boy.catch
             if event.type == pygame.KEYUP:
               if event.key == pygame.K_LEFT:
-                boy.left_pressed = False
+                boy.leftPressed = False
               if event.key == pygame.K_RIGHT:
-                boy.right_pressed = False
+                boy.rightPressed = False
               if event.key == pygame.K_UP:
-                boy.up_pressed = False
+                boy.upPressed = False
               if event.key == pygame.K_DOWN:
-                boy.down_pressed = False
+                boy.downPressed = False
+
+          if boy.y < 150:
+            boy.y = 150
+          if boy.y > 600:
+            boy.y = 600
+          if boy.x < 0:
+            boy.x = 0
+          if boy.x > 800:
+            boy.x = 800
+
+          # Fish 
+          self.maxFish = 5
+          self.numberOfFish = 0
+          self.fishes = []
+          
         
           self.screen.fill((12,24,36))
           self.screen.blit(level.image, (0,0))
@@ -146,7 +168,7 @@ class Controller:
           boy.update()
           pygame.display.flip()
         
-          self.clock.tick(20)
+          self.clock.tick(60)
             # for event in pygame.event.get():
             #     if event.type == pygame.KEYDOWN:
             #         if event.key == pygame.K_ESCAPE:
