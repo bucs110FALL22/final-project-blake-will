@@ -22,11 +22,11 @@ class Controller:
       
         self.clock = pygame.time.Clock()
 
-    def checkCollision(self, trident):
-      tridentRect = trident.image.get_rect()
-      for fish in self.fishes:
-        if tridentRect.colliderect(fish.image.get_rect()):
-          print(f"You caught a fish! It's worth ${fish.value}!")  
+    # def checkCollision(self, trident):
+    #   tridentRect = trident.image.get_rect()
+    #   for fish in self.fishes:
+    #     if tridentRect.colliderect(fish.image.get_rect()):
+    #       print(f"You caught a fish! It's worth ${fish.value}!")  
   
     def mainloop(self):
         self.clock.tick(60)
