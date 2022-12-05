@@ -18,6 +18,7 @@ class Player:
     self.downPressed = False
     self.speed = 4
     self.image = pygame.image.load("assets/boy.png")
+    self.tridentState = "ready"
   
   def draw (self,win):
     # pygame.draw.rect(win,self.color, self.rect)
@@ -41,8 +42,8 @@ class Player:
 
     self.rect = pygame.Rect(int(self.x), int(self.y), 32, 32)
 
-    def castHook():
-        pass
+    #def throwTrident():
+        
         # Creating a rectangle a distance away from the player based on accumulation value from some event hold (i.e. holding spacebar)
         # Runs a check to ensure the rectangle is lands in the water
         # Draw a small white circle at the rectangles center
