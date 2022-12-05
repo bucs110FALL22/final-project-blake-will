@@ -16,7 +16,7 @@ class Player:
     self.rightPressed = False
     self.upPressed = False
     self.downPressed = False
-    self.speed = 4
+    self.speed = 2
     self.image = pygame.image.load("assets/boy.png")
     self.tridentState = "ready"
   

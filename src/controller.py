@@ -44,29 +44,31 @@ class Controller:
                 if result == "menu":
                     loop = "menu"
             elif loop == "retire":
-                if self.retireLoop() == "end":
+                if self.retireLoop() == "done":
                   pygame.quit()
                   exit()
                 
 
     def menuloop(self):
 
-        fontStart = pygame.font.Font(None, 70)
-        fontTitle = pygame.font.Font(None, 100)
-        fontQuit = pygame.font.Font(None, 30)
-        rectStartButton = (((200*1.3), (250*1.5)), ((200*1.3), (75*1.5)))
+        fontStart = pygame.font.Font("assets/EndlessBossBattleRegular-v7Ey.ttf", 70)
+        fontTitle = pygame.font.Font("assets/EndlessBossBattleRegular-v7Ey.ttf", 100)
+        fontQuit = pygame.font.Font("assets/EndlessBossBattleRegular-v7Ey.ttf", 30)
+        rectStartButton = (((260), (375)), ((260), (112.5)))
         startHitbox = pygame.Rect(rectStartButton)
-        rectQuitButton = (((45*1.3), (350*1.5)), ((60*1.3), (30*1.5)))
+        rectQuitButton = (((58.5), (525)), ((78), (45)))
         quitButtonHitbox = pygame.Rect(rectQuitButton)
         self.screen.fill("white")
-        pygame.draw.rect(self.screen, "palevioletred", rectStartButton)
+        waves = pygame.image.load("assets/waaavey.jpg")
+        self.screen.blit(waves, (0, 0))
+        pygame.draw.rect(self.screen, "goldenrod", rectStartButton)
         pygame.draw.rect(self.screen, "red", rectQuitButton)
         msgStart = fontStart.render("START", True, "black")
-        msgTitle = fontTitle.render("Fishing  Game", True, "blue")
+        msgTitle = fontTitle.render("Fishing  Game", True, "navy")
         msgQuit = fontQuit.render("QUIT", True, "white")
-        self.screen.blit(msgStart, ((220*1.3), (265*1.5)))
-        self.screen.blit(msgTitle, ((65*1.3), (35*1.5)))
-        self.screen.blit(msgQuit, ((50*1.3), (355*1.5)))
+        self.screen.blit(msgStart, ((284), (402)))
+        self.screen.blit(msgTitle, ((78), (53)))
+        self.screen.blit(msgQuit, ((65), (535)))
         pygame.display.flip()
         run = True
         while run:
@@ -77,22 +79,27 @@ class Controller:
                         self.screen.fill("white")
                         pygame.display.flip()
                         pygame.draw.rect(self.screen, "green", rectStartButton)
-                        self.screen.blit(msgStart, ((220*1.3), (265*1.5)))
+                        self.screen.blit(msgStart, ((284), (402)))
                         pygame.display.flip()
                         pygame.time.wait(350)
                         pygame.display.flip()
                         pygame.time.wait(500)
                         self.screen.fill("white")
-                        rectBackToMenu = (((25*1.3), (25*1.5)), ((150*1.3), (50*1.5)))
+                        rectBackToMenu = (((32.5), (37.5)), ((195), (75)))
                         backToMenuHitbox = pygame.Rect(rectBackToMenu)
-                        rectLevelButton = (((175*1.3), (125*1.5)), ((250*1.3), (150*1.5)))
+                        rectLevelButton = (((227.5), (187.5)), ((325), (225)))
                         levelButtonHitbox = pygame.Rect(rectLevelButton)
                         pygame.draw.rect(self.screen, "black", rectBackToMenu)
                         pygame.draw.rect(self.screen, "blue", rectLevelButton)
-                        fontBackToMenu = pygame.font.Font(None, 50)
+                        fontBackToMenu = pygame.font.Font("assets/EndlessBossBattleRegular-v7Ey.ttf", 60)
+                        fontLevelStart = pygame.font.Font("assets/EndlessBossBattleRegular-v7Ey.ttf", 50)
+                        msgLevelPt1 = fontLevelStart.render("THE", True, "white")
+                        msgLevelPt2 = fontLevelStart.render("OCEAN", True, "white")
                         msgBackToMenu = fontBackToMenu.render(
                             "MENU", True, "white")
-                        self.screen.blit(msgBackToMenu, (50, 35))
+                        self.screen.blit(msgBackToMenu, (50, 50))
+                        self.screen.blit(msgLevelPt1, (340, 260))
+                        self.screen.blit(msgLevelPt2, (305, 300))
                         pygame.display.flip()
                         # also add level select screens once I can be bothered to get to that
                         run2 = True
@@ -124,7 +131,7 @@ class Controller:
 
           # Buttons, Text
 
-          rectRetireButton = ((700,640),(80,40))
+          rectRetireButton = ((670,540),(110,40))
           retireButtonHitbox = pygame.Rect(rectRetireButton)
 
           # Character Movement
@@ -166,8 +173,8 @@ class Controller:
               if event.key == pygame.K_DOWN:
                 boy.downPressed = False
 
-          if boy.y < 150:
-            boy.y = 150
+          if boy.y < 250:
+            boy.y = 250
           if boy.y > 600:
             boy.y = 600
           if boy.x < 0:
@@ -177,19 +184,21 @@ class Controller:
 
           # Fish 
 
-          if self.numberOfFish < self.maxFish:
-            self.numberOfFish += 1
+          
 
           
-          if len(self.fishes) < 3:
-            for fish in range(self.numberOfFish):
-              self.fishes.append(Fish(0, (random.randrange(0,175))))
+          if len(self.fishes) <= 3:
+            #for fish in range(self.numberOfFish):
+            self.fishes.append(Fish(5, (random.randrange(0,175))))
+
+          if self.numberOfFish < self.maxFish:
+            self.numberOfFish += 1
 
           
           for fish in self.fishes:
             fishRect = ((fish.x, fish.y),(fish.image.get_size()))
             fishHitbox = pygame.Rect(fishRect)
-            if fishHitbox.collidepoint((trident.x, trident.y)):
+            if fishHitbox.collidepoint((trident.x, trident.y)) or fishHitbox.collidepoint(trident.x + trident.image.get_width(), trident.y):
               self.earnings += fish.value
               self.fishCaught += 1
               self.fishes.remove(fish)
@@ -205,28 +214,69 @@ class Controller:
           
           self.screen.blit(level.image, (0,0))
           boy.draw(self.screen)
+          fontPoints = pygame.font.Font("assets/EndlessBossBattleRegular-v7Ey.ttf", 50)
+          msgPoints = fontPoints.render(f"${self.earnings}", True, "white")
+          self.screen.blit(msgPoints, (50, 535))
+          
+          pygame.draw.rect(self.screen, "red", rectRetireButton)
+          fontRetire = pygame.font.Font("assets/EndlessBossBattleRegular-v7Ey.ttf", 30)
+          msgRetire = fontRetire.render("RETIRE", True, "white")
+          self.screen.blit(msgRetire, (675 , 550))
+          
 
           trident.draw(self.screen)
           
           for fish in self.fishes:
             fish.draw(self.screen)
 
-          #self.checkCollision(trident)
+         
           
-          # pygame.draw.rect(self.screen, "red", rectRetireButton)
-          # fontRetire = pygame.font.Font("assets/EndlessBossBattleRegular-v7Ey.ttf", 30)
-          # msgRetire = fontRetire.render("RETIRE", True, "white")
-          # self.screen.blit(msgRetire, (700, 640))
-          # pygame.display.flip()
+          
           
           boy.update()
           pygame.display.flip()
         
-          self.clock.tick(60)
+          self.clock.tick(120)
 
-    def retireLoop():  #potential "game over" state to display stats at the end of the game
-        print("COngrats you finsihed")
-        return "done"
+    def retireLoop(self):  #potential "game over" state to display stats at the end of the game
+      print("Congrats, you retired successfully!")
+      self.screen.fill("black")
+      pygame.display.flip()
+      pygame.time.wait(500)
+      fontText = pygame.font.Font("assets/EndlessBossBattleRegular-v7Ey.ttf", 30)
+      fontNumbers = pygame.font.Font("assets/EndlessBossBattleRegular-v7Ey.ttf", 85)
+      msgCaught = fontText.render("Over your fishing career, you caught a total of", True, "white")
+      msgScore = fontText.render("These fish were worth a total value of...", True, "white")
+      msgCaughtNum = fontNumbers.render(f"{self.fishCaught} fish!!!", True, "white")
+      msgScoreNum = fontNumbers.render(f"${self.earnings}!!!", True, "white")
+      msghow2quit = fontText.render("(Press Q to exit the program)", True, "white")
+      self.screen.blit(msgCaught, (30,150))
+      pygame.display.flip()
+      pygame.time.wait(1500)
+      self.screen.blit(msgCaughtNum, (215, 200))
+      pygame.display.flip()
+      pygame.time.wait(1000)
+      self.screen.blit(msgScore, (70, 300))
+      pygame.display.flip()
+      pygame.time.wait(1500)
+      self.screen.blit(msgScoreNum, (230, 350))
+      pygame.display.flip()
+      pygame.time.wait(1000)
+      self.screen.blit(msghow2quit, (145, 500))
+      pygame.display.flip()
+      run = True
+      while run:
+        for event in pygame.event.get():
+          if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_q:
+              return "done"
+          
+        
+        
+        
+      
+
+      #return "done"
 
           
 

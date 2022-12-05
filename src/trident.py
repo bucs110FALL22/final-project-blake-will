@@ -8,7 +8,7 @@ class Trident:
     self.x = 700
     self.y = 450
     self.changeX = 0
-    self.changeY = -10
+    self.changeY = -5
     #self.rect = self.image.get_rect()
     self.state = "ready"
 
@@ -22,7 +22,7 @@ class Trident:
     self.state = "fire"
 
   def update(self):
-    if self.y < 0:
+    if self.y < (0 - self.image.get_height()):
       self.x = 700
       self.y = 450
       self.state = "ready"
